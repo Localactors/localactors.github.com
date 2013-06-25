@@ -1,0 +1,8 @@
+/*
+ * Padrino Javascript Jquery Adapter
+ * Created for use with Padrino Ruby Web Framework (http://www.padrinorb.com)
+**/
+/* Remote Form Support
+ * form_for @user, '/user', :remote => true
+**/
+$(function(){$("form[data-remote=true]").on("submit",function(t){t.preventDefault(),t.stopped=!0;var n=$(this),r=n.data("confirm");if(r&&!confirm(r))return!1;e.sendRequest(n,{verb:n.data("method")||n.attr("method")||"post",url:n.attr("action"),dataType:n.data("type")||$.ajaxSettings&&$.ajaxSettings.dataType||"script",params:n.serializeArray()})}),$("a[data-confirm]").on("click",function(e){var t=$(this).data("confirm");confirm(t)||(e.preventDefault(),e.stopped=!0)}),$("a[data-remote=true]").on("click",function(t){var n=$(this);if(t.stopped)return;t.preventDefault(),t.stopped=!0,e.sendRequest(n,{verb:n.data("method")||"get",url:n.attr("href")})}),$("a[data-method]:not([data-remote])").on("click",function(t){if(t.stopped)return;e.sendMethod($(this)),t.preventDefault(),t.stopped=!0});var e={sendRequest:function(e,t){var n=t.verb,r=t.url,i=t.params,s=t.dataType,o=e.trigger("ajax:before");if(o.stopped)return!1;$.ajax({url:r,type:n.toUpperCase()||"POST",data:i||[],dataType:s,beforeSend:function(t){e.trigger("ajax:loading",[t])},complete:function(t){e.trigger("ajax:complete",[t])},success:function(t){e.trigger("ajax:success",[t])},error:function(t){e.trigger("ajax:failure",[t])}}),e.trigger("ajax:after")},sendMethod:function(e){var t=e.data("method"),n=e.attr("href"),r=$('<form method="post" action="'+n+'"></form>');r.hide().appendTo("body");if(t!=="post"){var i='<input type="hidden" name="_method" value="'+t+'" />';r.append(i)}r.submit()}}});
